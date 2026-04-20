@@ -87,6 +87,7 @@ BEGIN_MESSAGE_MAP(CChildView, CWnd)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_RBUTTONDOWN()
 	ON_WM_KEYDOWN()
+	ON_WM_CHAR()
 END_MESSAGE_MAP()
 
 // CChildView message handlers
@@ -212,9 +213,14 @@ void CChildView::OnRButtonDown(UINT nFlags, CPoint point)
 	CWnd::OnRButtonDown(nFlags, point);
 }
 
-void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+bool CChildView::HandleHotkey(UINT keyCode)
 {
-	switch (nChar)
+	if (keyCode >= 'a' && keyCode <= 'z')
+	{
+		keyCode = keyCode - 'a' + 'A';
+	}
+
+	switch (keyCode)
 	{
 	case VK_SPACE:
 		m_paused = !m_paused;
@@ -263,11 +269,23 @@ void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		m_disturbancePreset = 3;
 		break;
 	default:
-		break;
+		return false;
 	}
 
 	Invalidate(FALSE);
+	return true;
+}
+
+void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	HandleHotkey(nChar);
 	CWnd::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+
+void CChildView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	HandleHotkey(nChar);
+	CWnd::OnChar(nChar, nRepCnt, nFlags);
 }
 
 int CChildView::Index(int x, int y) const

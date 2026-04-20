@@ -89,10 +89,15 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 
 BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 {
-	if (pMsg != nullptr && pMsg->message == WM_KEYDOWN && m_wndView.GetSafeHwnd() != nullptr)
+	if (pMsg != nullptr && m_wndView.GetSafeHwnd() != nullptr)
 	{
-		m_wndView.SendMessage(WM_KEYDOWN, pMsg->wParam, pMsg->lParam);
-		return TRUE;
+		if (pMsg->message == WM_KEYDOWN || pMsg->message == WM_CHAR)
+		{
+			if (m_wndView.HandleHotkey(static_cast<UINT>(pMsg->wParam)))
+			{
+				return TRUE;
+			}
+		}
 	}
 
 	return CFrameWnd::PreTranslateMessage(pMsg);

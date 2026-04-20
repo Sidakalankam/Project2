@@ -27,6 +27,7 @@ protected:
 // Implementation
 public:
 	virtual ~CChildView();
+	bool HandleHotkey(UINT keyCode);
 
 protected:
 	static constexpr UINT_PTR kSimTimerId = 1;
@@ -78,5 +79,6 @@ protected:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 	DECLARE_MESSAGE_MAP()
 };
