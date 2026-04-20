@@ -87,6 +87,17 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	return TRUE;
 }
 
+BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg != nullptr && pMsg->message == WM_KEYDOWN && m_wndView.GetSafeHwnd() != nullptr)
+	{
+		m_wndView.SendMessage(WM_KEYDOWN, pMsg->wParam, pMsg->lParam);
+		return TRUE;
+	}
+
+	return CFrameWnd::PreTranslateMessage(pMsg);
+}
+
 // CMainFrame diagnostics
 
 #ifdef _DEBUG
@@ -119,4 +130,3 @@ BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO*
 	// otherwise, do default handling
 	return CFrameWnd::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 }
-

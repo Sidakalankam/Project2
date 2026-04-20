@@ -22,6 +22,7 @@ public:
 // Overrides
 public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 
 // Implementation
@@ -44,5 +45,4 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 };
-
 
