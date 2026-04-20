@@ -36,13 +36,18 @@ namespace
 
 	float Clamp01(float v)
 	{
-		return std::max(0.0f, std::min(1.0f, v));
+		return (std::max)(0.0f, (std::min)(1.0f, v));
 	}
 
 	unsigned char ToByte(float v)
 	{
-		const int clamped = static_cast<int>(std::round(std::max(0.0f, std::min(255.0f, v))));
+		const int clamped = static_cast<int>(std::round((std::max)(0.0f, (std::min)(255.0f, v))));
 		return static_cast<unsigned char>(clamped);
+	}
+
+	int ClampInt(int v, int lo, int hi)
+	{
+		return (std::max)(lo, (std::min)(hi, v));
 	}
 }
 
@@ -228,22 +233,22 @@ void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		ApplyObstacleLayout(m_obstacleLayout);
 		break;
 	case 'Q':
-		m_waveSpeed = std::min(0.45f, m_waveSpeed + 0.01f);
+		m_waveSpeed = (std::min)(0.45f, m_waveSpeed + 0.01f);
 		break;
 	case 'A':
-		m_waveSpeed = std::max(0.02f, m_waveSpeed - 0.01f);
+		m_waveSpeed = (std::max)(0.02f, m_waveSpeed - 0.01f);
 		break;
 	case 'W':
-		m_damping = std::min(0.9995f, m_damping + 0.0005f);
+		m_damping = (std::min)(0.9995f, m_damping + 0.0005f);
 		break;
 	case 'S':
-		m_damping = std::max(0.94f, m_damping - 0.0005f);
+		m_damping = (std::max)(0.94f, m_damping - 0.0005f);
 		break;
 	case 'E':
-		m_disturbanceRadius = std::min(20, m_disturbanceRadius + 1);
+		m_disturbanceRadius = (std::min)(20, m_disturbanceRadius + 1);
 		break;
 	case 'D':
-		m_disturbanceRadius = std::max(1, m_disturbanceRadius - 1);
+		m_disturbanceRadius = (std::max)(1, m_disturbanceRadius - 1);
 		break;
 	case '1':
 		m_disturbancePreset = 0;
@@ -434,10 +439,10 @@ void CChildView::SetObstacleCircle(int gx, int gy, int radius, bool isObstacle)
 
 void CChildView::AddRectObstacle(int left, int top, int right, int bottom)
 {
-	left = std::max(1, left);
-	top = std::max(1, top);
-	right = std::min(m_gridWidth - 2, right);
-	bottom = std::min(m_gridHeight - 2, bottom);
+	left = (std::max)(1, left);
+	top = (std::max)(1, top);
+	right = (std::min)(m_gridWidth - 2, right);
+	bottom = (std::min)(m_gridHeight - 2, bottom);
 
 	for (int y = top; y <= bottom; ++y)
 	{
@@ -450,9 +455,9 @@ void CChildView::AddRectObstacle(int left, int top, int right, int bottom)
 
 void CChildView::AddCircleObstacle(int cx, int cy, int radius)
 {
-	for (int y = std::max(1, cy - radius); y <= std::min(m_gridHeight - 2, cy + radius); ++y)
+	for (int y = (std::max)(1, cy - radius); y <= (std::min)(m_gridHeight - 2, cy + radius); ++y)
 	{
-		for (int x = std::max(1, cx - radius); x <= std::min(m_gridWidth - 2, cx + radius); ++x)
+		for (int x = (std::max)(1, cx - radius); x <= (std::min)(m_gridWidth - 2, cx + radius); ++x)
 		{
 			const int dx = x - cx;
 			const int dy = y - cy;
@@ -535,7 +540,7 @@ void CChildView::RenderToPixelBuffer()
 			const float h = m_currHeight[idx];
 
 			const Vec3 normal = Normalize({ -(hR - hL) * 2.1f, -(hD - hU) * 2.1f, 1.0f });
-			const float ndotl = std::max(0.0f, normal.x * lightDir.x + normal.y * lightDir.y + normal.z * lightDir.z);
+			const float ndotl = (std::max)(0.0f, normal.x * lightDir.x + normal.y * lightDir.y + normal.z * lightDir.z);
 
 			Vec3 reflect =
 			{
@@ -545,7 +550,7 @@ void CChildView::RenderToPixelBuffer()
 			};
 			reflect = Normalize(reflect);
 
-			const float specular = std::pow(std::max(0.0f, reflect.z * viewDir.z), 32.0f);
+			const float specular = std::pow((std::max)(0.0f, reflect.z * viewDir.z), 32.0f);
 			const float ambient = 0.21f;
 			const float diffuse = 0.79f * ndotl;
 
@@ -588,11 +593,11 @@ CPoint CChildView::ScreenToGrid(const CPoint& pt) const
 {
 	CRect client;
 	GetClientRect(&client);
-	const int clientW = std::max(1, client.Width());
-	const int clientH = std::max(1, client.Height());
+	const int clientW = (std::max)(1, client.Width());
+	const int clientH = (std::max)(1, client.Height());
 
-	const int gx = std::clamp((pt.x * m_gridWidth) / clientW, 0, m_gridWidth - 1);
-	const int gy = std::clamp((pt.y * m_gridHeight) / clientH, 0, m_gridHeight - 1);
+	const int gx = ClampInt((pt.x * m_gridWidth) / clientW, 0, m_gridWidth - 1);
+	const int gy = ClampInt((pt.y * m_gridHeight) / clientH, 0, m_gridHeight - 1);
 	return CPoint(gx, gy);
 }
 
